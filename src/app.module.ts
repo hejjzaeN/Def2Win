@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { UserModel } from './user/user.model';
+import { UserModule } from './user/user.module';
 
 @Module({
     imports: [
@@ -10,8 +12,11 @@ import { SequelizeModule } from '@nestjs/sequelize';
             username: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE,
-            models: [],
-        })
+            models: [
+                
+            ],
+        }),
+        UserModule
     ],
     controllers: [],
     providers: [],
