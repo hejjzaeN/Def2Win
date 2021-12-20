@@ -1,8 +1,17 @@
 import { ApiProperty, ApiTags } from '@nestjs/swagger';
-import { ARRAY, Model } from 'sequelize';
+import { Model } from 'sequelize-typescript';
 import { Column, DataType, Table } from 'sequelize-typescript';
+import { ARRAY } from 'sequelize/types';
 
 import { AccessLevel } from 'src/const/db';
+
+interface UserCreationAttrs {
+    email: string,
+    password: string,
+    firstname: string,
+    surname: string,
+    dob: Date
+}
 
 @ApiTags('Users')
 @Table({tableName: 'user'})
@@ -32,9 +41,9 @@ export class UserModel extends Model<UserModel> {
 
     @ApiProperty({example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c', description: 'jwt token'})
     @Column({
-        type: ARRAY(DataType.STRING)
+        type: DataType.STRING
     })
-    Tokens: string[];
+    Tokens: string;
 
     @Column({
         allowNull: true
