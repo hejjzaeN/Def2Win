@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import * as bcrypt from 'bcrypt';
 
 import { UserModel } from './user.model';
 import { AccessLevel } from 'src/const/db';
@@ -12,6 +13,7 @@ export class UserService {
         try {
             user.JoinedOn = new Date();
             user.AccessLevel = AccessLevel.MEMBER
+            user.Password = await bcrypt.hash(user.Password, 10)
             user.Tokens = '1'
             const newUser = await this.userModel.create(user)
             return {message: `${newUser.Firstname} ${newUser.Surname} has been created`}
@@ -27,6 +29,10 @@ export class UserService {
 
     async read (id: number) {
         return await this.userModel.findByPk(id)
+    }
+
+    async readByEmail (email: string) {
+        return await this.userModel.findOne({where: {Email: email}})
     }
 
     async update (id: number, user: UserModel) {
