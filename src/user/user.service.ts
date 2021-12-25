@@ -9,20 +9,6 @@ import { AccessLevel } from 'src/const/db';
 export class UserService {
     constructor (@InjectModel(UserModel) private userModel: typeof UserModel) { }
 
-    async create (user: UserModel) {
-        try {
-            user.JoinedOn = new Date();
-            user.AccessLevel = AccessLevel.MEMBER
-            user.Password = await bcrypt.hash(user.Password, 10)
-            user.Tokens = '1'
-            const newUser = await this.userModel.create(user)
-            return {message: `${newUser.Firstname} ${newUser.Surname} has been created`}
-        }
-        catch (err) {
-            return {message: `Error - ${err}`}
-        }
-    }
-
     async readAll () {
         return await this.userModel.findAll()
     }
@@ -47,7 +33,7 @@ export class UserService {
             }
             return {message: 'The user has been deleted'}
         } catch (err) {
-            return {message: `Error - ${err}`}
+            return {message: `${err}`}
         }
     }
 }

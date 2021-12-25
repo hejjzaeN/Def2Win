@@ -1,17 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, UseGuards } from '@nestjs/common';
 
 import { UserModel } from './user.model';
 import { UserService } from './user.service';
-
 @Controller('user')
 export class UserController {
-    constructor (private readonly userService: UserService) {}
 
-    @HttpCode(HttpStatus.CREATED)
-    @Post('/register')
-    create (@Body() user: UserModel) {
-        return this.userService.create(user)
-    }
+    constructor (private readonly userService: UserService) {}
 
     @HttpCode(HttpStatus.FOUND)
     @Get()
