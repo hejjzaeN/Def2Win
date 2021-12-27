@@ -18,16 +18,16 @@ export class UserService {
     }
 
     async readByEmail (email: string) {
-        return await this.userModel.findOne({where: {Email: email}})
+        return await this.userModel.findOne({where: {email}, raw: true})
     }
 
     async update (id: number, user: UserModel) {
-        return await this.userModel.update(user, {where: {Id: id}})
+        return await this.userModel.update(user, {where: {id}})
     }
 
     async delete (id: number) {
         try {
-            const rowsAffected = await this.userModel.destroy({where: {Id: id}})
+            const rowsAffected = await this.userModel.destroy({where: {id}})
             if (rowsAffected <= 0) {
                 throw Error('invalid request')
             }

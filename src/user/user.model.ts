@@ -23,60 +23,60 @@ export class UserModel extends Model<UserModel> {
         autoIncrement: true,
         primaryKey: true
     })
-    Id: number;
+    id: number;
 
     @ApiProperty({example: 'def2win@gmail.com', description: 'user email'})
     @Column({
         type: DataType.STRING,
         allowNull: false
     })
-    Email: string;
+    email: string;
 
     @ApiProperty({example: '#hfk92@dkM_2s', description: 'user password'})
     @Column({
         type: DataType.STRING,
         allowNull: false
     })
-    Password: string;
+    password: string;
 
     @ApiProperty({example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c', description: 'jwt token'})
     @Column({
         type: DataType.STRING
     })
-    Tokens: string;
+    tokens: string;
 
     @Column({
         allowNull: true
     })
-    ResetedOn: Date;
+    resetedOn: Date;
 
     @ApiProperty({example: 'Pavel', description: 'user firstname'})
     @Column({
         type: DataType.STRING,
         allowNull: false
     })
-    Firstname: string;
+    firstname: string;
 
     @ApiProperty({example: 'Petrov', description: 'user surname'})
     @Column({
         type: DataType.STRING,
         allowNull: false
     })
-    Surname: string;
+    surname: string;
 
     @ApiProperty({example: '08/08/1995', description: 'user date of birth'})
     @Column({
         type: DataType.STRING,
         allowNull: false
     })
-    Dob: Date;
+    dob: Date;
 
     @Column({
         allowNull: true
         // TO DO :
         // ,defaultValue: 'link to a default img'
     })
-    AvatarPath: string;
+    avatarPath: string;
 
     @ApiProperty({example: '4', description: 'user access level'})
     @Column({
@@ -84,23 +84,23 @@ export class UserModel extends Model<UserModel> {
         allowNull: false,
         defaultValue: AccessLevel.MEMBER
     })
-    AccessLevel: number;
+    accessLevel: number;
 
     @Column({
         type: DataType.DATE,
         allowNull: false
     })
-    JoinedOn: Date;
+    joinedOn: Date;
 
     @Column({
         type: DataType.DATE,
         allowNull: true
     })
-    LastActionOn: Date;
+    lastActionOn: Date;
 
     @Column({
         type: DataType.DATE,
         allowNull: true
     })
-    LastVisitOn: Date;
+    lastVisitOn: Date;
 }
