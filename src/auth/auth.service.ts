@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
 
 import { AccessLevel } from 'src/const/db';
+import { ErrorDescription } from 'src/const/errors';
 import { UserProfileDto } from 'src/dto/user-profile.dto';
 import { UserModel } from 'src/user/user.model';
 import { UserService } from 'src/user/user.service';
@@ -19,12 +20,15 @@ export class AuthService {
     async validateUser (email: string, password: string) {
         const user = await this.userService.readByEmail(email)
         if (!user) {
-            return null
+            throw new HttpException(ErrorDescription.ERR_AUTH_INVALID_CREDENTIALS, HttpStatus.FORBIDDEN)
+        }
+        if (user.accessLevel === AccessLevel.PENDING) {
+            throw new HttpException(ErrorDescription.ERR_AUTH_PENDING, HttpStatus.FORBIDDEN)
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password)
         if (passwordMatch) {
-            const {email, password, tokens, ...result} = user
+            const {email, password, ...result} = user
             return result
         }
         
@@ -32,39 +36,38 @@ export class AuthService {
     }
 
     async register (user: UserModel) {
-        try {
-            if (!user.email || !user.password || !user.firstname || !user.surname || !user.dob) {
-                throw new Error('Empty values are not allowed')
-            }
-
-            const checkUser = await this.userService.readByEmail(user.email)
-            if (checkUser) {
-                throw new Error('This user already exists')
-            }
-
-            user.joinedOn = new Date();
-            user.accessLevel = AccessLevel.MEMBER
-            user.password = await bcrypt.hash(user.password, +process.env.BCRYPT_SALT_ROUND)
-            // TO DO
-            user.tokens = '1'
-
-            const newUser = await this.userModel.create(user)
-            if (!newUser) {
-                throw new Error('Cannot create user')
-            }
-
-            return {message: `${newUser.firstname} ${newUser.surname} has been created`}
+        if (!user.email || !user.password || !user.firstname || !user.surname || !user.dob) {
+            throw new HttpException(ErrorDescription.ERR_AUTH_EMPTY_VALUES, HttpStatus.FORBIDDEN)
         }
-        catch (err) {
-            return new HttpException(err, HttpStatus.FORBIDDEN)
+
+        const checkUser = await this.userService.readByEmail(user.email)
+        if (checkUser) {
+            throw new HttpException(ErrorDescription.ERR_AUTH_ALREADY_EXIST, HttpStatus.FORBIDDEN)
         }
+
+        user.joinedOn = new Date();
+        user.accessLevel = AccessLevel.PENDING
+        user.token = this.jwtService.sign({user: user.firstname, sub: user.id})
+        user.password = await bcrypt.hash(user.password, +process.env.BCRYPT_SALT_ROUND)
+
+        const newUser = await this.userModel.create(user)
+        if (!newUser) {
+            throw new HttpException(ErrorDescription.ERR_DB_CREATE_ERR, HttpStatus.FORBIDDEN)
+        }
+
+        return {message: `${newUser.firstname} ${newUser.surname} has been created`}
     }
 
-    async login (user: UserProfileDto) {
+    async login (user: any) {
         const payLoad = {user: user.firstname, sub: user.id}
-        return {
-            ...user,
-            tokens: this.jwtService.sign(payLoad)
+
+        user.token = this.jwtService.sign(payLoad)
+    
+        const rowsAffected = await this.userService.updateInternal(user.id, user)
+        if (!rowsAffected) {
+            throw new HttpException(ErrorDescription.ERR_DB_UPDATE_ERR, HttpStatus.FORBIDDEN)
         }
+
+        return user
     }
 }

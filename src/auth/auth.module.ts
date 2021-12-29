@@ -15,7 +15,7 @@ import { JwtStrategy } from './jwt.strategy';
     SequelizeModule.forFeature([UserModel]),
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '60s' }
+      signOptions: { expiresIn: '2 days' }
     }),
     PassportModule,
     UserModule

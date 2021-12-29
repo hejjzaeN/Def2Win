@@ -1,10 +1,16 @@
 export enum AccessLevel {
     OWNER = 1,
     ADMIN = 2,
-    MODER = 3,
-    MEMBER = 4,
+    MEMBER = 3,
+    PENDING = 4,
     BANNED = 5
 };
+
+export enum DBChange {
+    FORBIDDEN = 0,
+    PARTIALLY_ALLOWED = 1,
+    FULLY_ALLOWED = 2
+}
 
 export enum UserRight {
     LOGIN,
