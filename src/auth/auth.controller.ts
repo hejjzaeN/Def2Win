@@ -3,7 +3,6 @@ import { Body, Controller, HttpCode, HttpStatus, Post, Request, UseGuards } from
 import { AuthService } from './auth.service';
 import { UserModel } from 'src/user/user.model';
 import { LocalAuthenticationGuard } from './local-auth.guard';
-import { UserLoginDto } from 'src/dto/user-login.dto';
 
 @Controller('auth')
 export class AuthController {

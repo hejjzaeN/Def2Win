@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { AccessLevel, DBChange } from 'src/const/db';
+
+import { AccessLevel, DBChange } from 'src/const/db.const';
 
 @Injectable()
 export class AccessService {

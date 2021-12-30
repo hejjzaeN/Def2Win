@@ -3,9 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
 
-import { AccessLevel } from 'src/const/db';
-import { ErrorDescription } from 'src/const/errors';
-import { UserProfileDto } from 'src/dto/user-profile.dto';
+import { AccessLevel } from 'src/const/db.const';
+import { ErrorDescription } from 'src/const/errors.const';
+import { AUTH_MAX_LOGIN_ATTEMPTS } from 'src/const/user.const';
 import { UserModel } from 'src/user/user.model';
 import { UserService } from 'src/user/user.service';
 
@@ -25,13 +25,23 @@ export class AuthService {
         if (user.accessLevel === AccessLevel.PENDING) {
             throw new HttpException(ErrorDescription.ERR_AUTH_PENDING, HttpStatus.FORBIDDEN)
         }
+        if (user.loginAttempts > AUTH_MAX_LOGIN_ATTEMPTS) {
+            throw new HttpException(ErrorDescription.ERR_AUTH_EXCEED_LOGIN_ATTEMPTS, HttpStatus.FORBIDDEN)
+        }
 
         const passwordMatch = await bcrypt.compare(password, user.password)
         if (passwordMatch) {
             const {email, password, ...result} = user
             return result
+        } else {
+            user.loginAttempts += 1
+            if (user.loginAttempts === AUTH_MAX_LOGIN_ATTEMPTS) {
+                user.accessLevel = AccessLevel.BANNED
+            }
+            await this.userService.updateInternal(user.id, user)
+            throw new HttpException(ErrorDescription.ERR_AUTH_INVALID_CREDENTIALS, HttpStatus.FORBIDDEN)
         }
-        
+    
         return null
     }
 

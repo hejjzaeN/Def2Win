@@ -1,0 +1,1 @@
+export const AUTH_MAX_LOGIN_ATTEMPTS = 3

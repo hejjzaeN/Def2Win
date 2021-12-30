@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 
 import { UserModel } from './user.model';
 import { AccessService } from 'src/access/access.service';
-import { ErrorDescription } from 'src/const/errors';
-import { DBChange } from 'src/const/db';
+import { ErrorDescription } from 'src/const/errors.const';
+import { DBChange } from 'src/const/db.const';
 
 @Injectable()
 export class UserService {

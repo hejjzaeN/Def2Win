@@ -3,7 +3,7 @@ import { Model } from 'sequelize-typescript';
 import { Column, Table } from 'sequelize-typescript';
 import { DataTypes } from 'sequelize';
 
-import { AccessLevel } from 'src/const/db';
+import { AccessLevel } from 'src/const/db.const';
 
 @ApiTags('Users')
 @Table({tableName: 'users'})
@@ -78,6 +78,12 @@ export class UserModel extends Model<UserModel> {
         defaultValue: AccessLevel.MEMBER
     })
     accessLevel: number;
+
+    @Column({
+        type: DataTypes.INTEGER,
+        allowNull: true
+    })
+    loginAttempts: number
 
     @Column({
         type: DataTypes.DATE,

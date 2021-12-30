@@ -3,6 +3,7 @@ import { Body, Controller, Delete, Get, Headers, HttpCode, HttpStatus, Param, Pa
 import { UserModel } from './user.model';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
 @Controller('users')
 export class UserController {
 
