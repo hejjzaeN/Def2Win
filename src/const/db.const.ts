@@ -48,3 +48,8 @@ export enum GoalTrackType {
     DAYS,
     TIMES
 }
+
+export enum GoalPeriodType {
+    MONTHLY,
+    YEARLY
+}

@@ -19,6 +19,7 @@ export class UserService {
 
     async read (id: number) {
         const user = await this.userModel.findByPk(id, {raw: true})
+        console.log(user)
         if (!user) {
             throw new HttpException(ErrorDescription.ERR_USERS_READ_NO_EXIST, HttpStatus.FORBIDDEN)
         }

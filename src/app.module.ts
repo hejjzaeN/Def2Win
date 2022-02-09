@@ -5,6 +5,7 @@ import { UserModel } from './user/user.model';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AccessModule } from './access/access.module';
+import { GoalModule } from './goal/goal.module';
 
 @Module({
     imports: [
@@ -23,7 +24,8 @@ import { AccessModule } from './access/access.module';
         }),
         UserModule,
         AuthModule,
-        AccessModule
+        AccessModule,
+        GoalModule
     ],
     controllers: [],
     providers: [],
